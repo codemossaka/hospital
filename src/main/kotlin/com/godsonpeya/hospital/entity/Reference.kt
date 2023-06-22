@@ -12,7 +12,5 @@ class Reference(
     var name: String,
     var minValue: Double,
     var maxValue: Double,
-//    @ManyToOne
-//    val category: Category,
     var unit: String
 )
