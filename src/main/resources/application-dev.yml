@@ -1,0 +1,24 @@
+server:
+  servlet:
+    context-path: /api
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: on
+  sql:
+    init:
+      mode: always
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  docker:
+    compose:
+      lifecycle-management: start_only
+      file: @project.basedir@/docker-compose-bd.yml
+
+springdoc:
+  swagger-ui:
+    path: /docs

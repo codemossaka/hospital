@@ -1,0 +1,47 @@
+version: '3.1'
+services:
+
+  app:
+    container_name: hospital-api
+    build: .
+    working_dir: /app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DATABASE_NAME}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_DATABASE_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_DATABASE_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - UPLOAD_PATH=/home/media2/files
+    volumes:
+      - .:/app
+      - /home/media2/files:/home/media2/files
+    ports:
+      - "9998:9998"
+    command: mvn clean spring-boot:run
+    depends_on:
+      - db
+  db:
+    container_name: hospital_db
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_DATABASE_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_DATABASE_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE_NAME}
+    ports:
+      - "5429:5432"
+    volumes:
+      - ../../config/postgres/hospital/postgres_data:/var/lib/postgresql/data/
+
+  adminer:
+    container_name: hospital-adminer
+    image: adminer
+    restart: always
+    ports:
+      - "9029:8080"
+
+networks:
+  atm_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.2.0/24
