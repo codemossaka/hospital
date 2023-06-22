@@ -15,7 +15,7 @@ services:
       - .:/app
       - /home/media2/files:/home/media2/files
     ports:
-      - "9998:9998"
+      - "9997:9998"
     command: mvn clean spring-boot:run
     depends_on:
       - db
